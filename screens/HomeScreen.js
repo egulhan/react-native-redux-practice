@@ -1,23 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, Button, TextInput, StyleSheet,TouchableOpacity} from "react-native";
+import {View, Text, Button, TextInput, StyleSheet, TouchableOpacity} from "react-native";
+import {connect} from 'react-redux';
+import {addFood} from "../actions/food";
 
 class HomeScreen extends Component {
-    static navigationOptions={
+    static navigationOptions = {
         title: 'Home!!!',
     };
 
     state = {
         food: null,
-        foodList: [],
-    };
-
-    addFood = (food) => {
-        this.setState({
-            foodList: [
-                ...this.state.foodList,
-                {key: Math.random(), name: food},
-            ]
-        })
     };
 
     render() {
@@ -29,10 +21,10 @@ class HomeScreen extends Component {
                     style={styles.foodInput}
                     onChangeText={(food) => this.setState({food})}
                 />
-                <TouchableOpacity onPress={()=>this.addFood(this.state.food)} style={{marginBottom:15}}>
+                <TouchableOpacity onPress={() => this.props.add(this.state.food)} style={{marginBottom: 15}}>
                     <Text>Submit</Text>
                 </TouchableOpacity>
-                <Button onPress={() => this.props.navigation.navigate('FoodList',{foodList:this.state.foodList})} title="Go to Food List"/>
+                <Button onPress={() => this.props.navigation.navigate('FoodList')} title="Go to Food List"/>
             </View>
         );
     }
@@ -59,4 +51,13 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        add: (food) => dispatch(addFood(food)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
